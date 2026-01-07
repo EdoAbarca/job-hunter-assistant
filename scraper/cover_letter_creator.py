@@ -122,8 +122,7 @@ def create_cover_letter(profile_path, job_path, output_dir):
     with open(output_file, 'w') as f:
         f.write(cover_letter_content)
     
-    print(f"Cover letter created successfully")
-    print(f"Output saved to: {output_file}")
+    print(f"Cover letter created successfully: {output_file}")
     
     return True
 

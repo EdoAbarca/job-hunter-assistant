@@ -25,8 +25,8 @@ COPY scraper.py cv_creator.py cover_letter_creator.py /app/
 RUN mkdir -p /app/output
 
 # Create a non-root user
-RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
-USER appuser
+RUN useradd -m -u 1000 scraper && chown -R scraper:scraper /app
+USER scraper
 
 # Default command (can be overridden)
 CMD ["python", "scraper.py"]
