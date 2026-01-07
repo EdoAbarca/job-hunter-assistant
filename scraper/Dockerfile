@@ -1,25 +1,15 @@
-FROM nvidia/cuda:12.1.0-base-ubuntu22.04
+FROM python:3.11-slim
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-ENV DEBIAN_FRONTEND=noninteractive
 
 # Set work directory
 WORKDIR /app
 
-# Install Python and system dependencies
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    python3.11 \
-    python3-pip \
-    python3.11-venv \
-    git \
-    wget \
-    curl \
     && rm -rf /var/lib/apt/lists/*
-
-# Create symbolic link for python
-RUN ln -s /usr/bin/python3.11 /usr/bin/python
 
 # Upgrade pip
 RUN pip install --upgrade pip
@@ -28,15 +18,15 @@ RUN pip install --upgrade pip
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the scraper script
-COPY scraper.py /app/
+# Copy the scripts
+COPY scraper.py cv_creator.py cover_letter_creator.py /app/
 
 # Create output directory
 RUN mkdir -p /app/output
 
 # Create a non-root user
-RUN useradd -m -u 1000 scraper && chown -R scraper:scraper /app
-USER scraper
+RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
+USER appuser
 
-# Set the entrypoint
-ENTRYPOINT ["python", "scraper.py"]
+# Default command (can be overridden)
+CMD ["python", "scraper.py"]

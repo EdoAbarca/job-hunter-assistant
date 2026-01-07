@@ -68,7 +68,7 @@ services:
     networks:
       - job-hunter-network
 
-  # Job Scraper with CUDA support
+  # Job Processing Scripts (Scraper, CV Creator, Cover Letter Creator)
   scraper:
     build:
       context: ./scraper
@@ -78,13 +78,6 @@ services:
       - ./scraper/output:/app/output
     environment:
       PYTHONUNBUFFERED: 1
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
     networks:
       - job-hunter-network
     profiles:

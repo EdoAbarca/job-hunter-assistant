@@ -2,6 +2,10 @@
 output/
 *.json
 *.csv
+*.md
+*.txt
+*.pdf
+*.docx
 
 # Python
 __pycache__/

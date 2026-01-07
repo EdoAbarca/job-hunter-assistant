@@ -6,35 +6,16 @@ This script scrapes job postings from various sources and stores them
 for analysis and processing.
 """
 
-import os
 import sys
 import json
 from datetime import datetime
 from pathlib import Path
 
 
-def check_cuda_availability():
-    """Check if CUDA is available for GPU acceleration."""
-    try:
-        import torch
-        cuda_available = torch.cuda.is_available()
-        if cuda_available:
-            print(f"CUDA is available. Device: {torch.cuda.get_device_name(0)}")
-        else:
-            print("CUDA is not available. Running on CPU.")
-        return cuda_available
-    except ImportError:
-        print("PyTorch not installed. CUDA check skipped.")
-        return False
-
-
 def scrape_jobs():
     """Main scraping function."""
     print("Starting job scraping process...")
     print(f"Timestamp: {datetime.now().isoformat()}")
-    
-    # Check CUDA availability
-    cuda_available = check_cuda_availability()
     
     # Create output directory if it doesn't exist
     output_dir = Path(__file__).parent / "output"
@@ -48,6 +29,8 @@ def scrape_jobs():
             "company": "Tech Corp",
             "location": "Remote",
             "posted_date": datetime.now().isoformat(),
+            "description": "We are looking for a talented software engineer...",
+            "requirements": ["Python", "Django", "React", "3+ years experience"],
         },
         {
             "id": 2,
@@ -55,6 +38,8 @@ def scrape_jobs():
             "company": "AI Innovations",
             "location": "San Francisco, CA",
             "posted_date": datetime.now().isoformat(),
+            "description": "Join our data science team to build ML models...",
+            "requirements": ["Python", "Machine Learning", "SQL", "5+ years experience"],
         },
     ]
     
@@ -63,7 +48,6 @@ def scrape_jobs():
     with open(output_file, 'w') as f:
         json.dump({
             'timestamp': datetime.now().isoformat(),
-            'cuda_available': cuda_available,
             'jobs_count': len(jobs),
             'jobs': jobs
         }, f, indent=2)

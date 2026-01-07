@@ -1,6 +1,6 @@
 # Job Hunter Assistant
 
-An AI-powered job search assistant with web scraping capabilities, built with Next.js, Django, and CUDA-accelerated processing.
+An AI-powered job search assistant with web scraping capabilities, built with Next.js, Django, and LLM-powered document generation.
 
 ## Project Structure
 
@@ -20,9 +20,11 @@ job-hunter-assistant/
 │   ├── api/                   # API application
 │   ├── Dockerfile             # Backend container
 │   └── requirements.txt
-├── scraper/                    # CUDA-accelerated job scraper
-│   ├── scraper.py             # Main scraper script
-│   ├── Dockerfile             # NVIDIA CUDA container
+├── scraper/                    # Job processing scripts
+│   ├── scraper.py             # Job scraper script
+│   ├── cv_creator.py          # CV generator using LLM API
+│   ├── cover_letter_creator.py # Cover letter generator using LLM API
+│   ├── Dockerfile             # Python slim container
 │   └── requirements.txt
 ├── docker-compose.yml          # Multi-service orchestration
 ├── Makefile                   # Development commands
@@ -33,7 +35,9 @@ job-hunter-assistant/
 
 - **Next.js Frontend**: Modern, responsive UI built with TypeScript and Tailwind CSS
 - **Django Backend**: RESTful API with PostgreSQL database
-- **Job Scraper**: Python script with CUDA GPU acceleration for efficient data processing
+- **Job Scraper**: Python script for collecting job postings from various sources
+- **CV Creator**: LLM-powered script for generating tailored CVs
+- **Cover Letter Creator**: LLM-powered script for generating tailored cover letters
 - **Docker Compose**: Complete development environment with one command
 - **GitHub Actions**: Automated linting, testing, and scheduled scraping
 - **Makefile**: Convenient commands for common development tasks
@@ -43,7 +47,7 @@ job-hunter-assistant/
 - Docker and Docker Compose
 - Node.js 20+ (for local frontend development)
 - Python 3.11+ (for local backend development)
-- NVIDIA GPU with CUDA support (optional, for scraper acceleration)
+- LLM API key (OpenAI, Anthropic, etc.) for CV and cover letter generation
 
 ## Quick Start
 
@@ -107,13 +111,38 @@ python manage.py runserver            # Start development server
 python manage.py test                 # Run tests
 ```
 
-### Scraper
+### Job Processing Scripts
 
-Run the scraper manually:
+**Job Scraper**
 ```bash
+# Run via Docker
 make scraper-run
 # or
 docker-compose run --rm scraper
+
+# Run locally
+cd scraper
+python scraper.py
+```
+
+**CV Creator**
+```bash
+# Run via Docker
+docker-compose run --rm scraper python cv_creator.py profile.json job.json /app/output
+
+# Run locally
+cd scraper
+python cv_creator.py profile.json job.json ./output
+```
+
+**Cover Letter Creator**
+```bash
+# Run via Docker
+docker-compose run --rm scraper python cover_letter_creator.py profile.json job.json /app/output
+
+# Run locally
+cd scraper
+python cover_letter_creator.py profile.json job.json ./output
 ```
 
 The scraper runs automatically via GitHub Actions on a daily schedule (CRON).
