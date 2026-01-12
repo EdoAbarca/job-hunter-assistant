@@ -64,6 +64,8 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: backend/requirements.txt
 
       - name: Install dependencies
         working-directory: backend
@@ -102,6 +104,8 @@ jobs:
           context: ./frontend
           push: false
           tags: job-hunter-frontend:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Build backend image
         uses: docker/build-push-action@v5
@@ -109,6 +113,8 @@ jobs:
           context: ./backend
           push: false
           tags: job-hunter-backend:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Build scraper image
         uses: docker/build-push-action@v5
@@ -116,3 +122,5 @@ jobs:
           context: ./scraper
           push: false
           tags: job-hunter-scraper:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

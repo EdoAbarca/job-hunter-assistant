@@ -16,11 +16,11 @@ def scrape_jobs():
     """Main scraping function."""
     print("Starting job scraping process...")
     print(f"Timestamp: {datetime.now().isoformat()}")
-    
+
     # Create output directory if it doesn't exist
     output_dir = Path(__file__).parent / "output"
     output_dir.mkdir(exist_ok=True)
-    
+
     # Placeholder for actual scraping logic
     jobs = [
         {
@@ -39,22 +39,31 @@ def scrape_jobs():
             "location": "San Francisco, CA",
             "posted_date": datetime.now().isoformat(),
             "description": "Join our data science team to build ML models...",
-            "requirements": ["Python", "Machine Learning", "SQL", "5+ years experience"],
+            "requirements": [
+                "Python",
+                "Machine Learning",
+                "SQL",
+                "5+ years experience",
+            ],
         },
     ]
-    
+
     # Save results
     output_file = output_dir / f"jobs_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-    with open(output_file, 'w') as f:
-        json.dump({
-            'timestamp': datetime.now().isoformat(),
-            'jobs_count': len(jobs),
-            'jobs': jobs
-        }, f, indent=2)
-    
+    with open(output_file, "w") as f:
+        json.dump(
+            {
+                "timestamp": datetime.now().isoformat(),
+                "jobs_count": len(jobs),
+                "jobs": jobs,
+            },
+            f,
+            indent=2,
+        )
+
     print(f"Scraped {len(jobs)} jobs")
     print(f"Results saved to: {output_file}")
-    
+
     return len(jobs)
 
 

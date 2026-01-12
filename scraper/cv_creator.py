@@ -15,7 +15,7 @@ from pathlib import Path
 def load_user_profile(profile_path):
     """Load user profile from JSON file."""
     try:
-        with open(profile_path, 'r') as f:
+        with open(profile_path, "r") as f:
             return json.load(f)
     except FileNotFoundError:
         print(f"Profile file not found: {profile_path}", file=sys.stderr)
@@ -28,7 +28,7 @@ def load_user_profile(profile_path):
 def load_job_description(job_path):
     """Load job description from JSON file."""
     try:
-        with open(job_path, 'r') as f:
+        with open(job_path, "r") as f:
             return json.load(f)
     except FileNotFoundError:
         print(f"Job description file not found: {job_path}", file=sys.stderr)
@@ -41,13 +41,13 @@ def load_job_description(job_path):
 def call_llm_api(profile, job_description):
     """
     Call LLM API to generate tailored CV.
-    
+
     This is a placeholder for the actual API call.
     Replace with your preferred LLM API (OpenAI, Anthropic, etc.)
     """
     # Placeholder for actual API call
     print("Calling LLM API to generate CV...")
-    
+
     # TODO: Replace with actual API call
     # Example:
     # import openai
@@ -62,7 +62,7 @@ def call_llm_api(profile, job_description):
     #     }]
     # )
     # return response.choices[0].message.content
-    
+
     # Mock response for demonstration
     cv_content = f"""
 # {profile.get('name', 'Professional')}
@@ -81,7 +81,7 @@ Experienced professional with expertise in {', '.join(job_description.get('requi
 
 Generated for: {job_description.get('title', 'Position')} at {job_description.get('company', 'Company')}
 """
-    
+
     return cv_content
 
 
@@ -89,33 +89,36 @@ def create_cv(profile_path, job_path, output_dir):
     """Create a tailored CV for the given job."""
     print("Starting CV creation process...")
     print(f"Timestamp: {datetime.now().isoformat()}")
-    
+
     # Load user profile and job description
     profile = load_user_profile(profile_path)
     if not profile:
         return False
-    
+
     job_description = load_job_description(job_path)
     if not job_description:
         return False
-    
+
     # Create output directory if it doesn't exist
     output_path = Path(output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
-    
+
     # Generate CV using LLM API
     cv_content = call_llm_api(profile, job_description)
-    
+
     # Save CV to file
-    job_title = job_description.get('title', 'position').replace(' ', '_').lower()
-    company = job_description.get('company', 'company').replace(' ', '_').lower()
-    output_file = output_path / f"cv_{company}_{job_title}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
-    
-    with open(output_file, 'w') as f:
+    job_title = job_description.get("title", "position").replace(" ", "_").lower()
+    company = job_description.get("company", "company").replace(" ", "_").lower()
+    output_file = (
+        output_path
+        / f"cv_{company}_{job_title}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
+    )
+
+    with open(output_file, "w") as f:
         f.write(cv_content)
-    
+
     print(f"CV created successfully: {output_file}")
-    
+
     return True
 
 
@@ -126,11 +129,11 @@ def main():
         print("\nExample:")
         print("  python cv_creator.py profile.json job_description.json ./output")
         return 1
-    
+
     profile_path = sys.argv[1]
     job_path = sys.argv[2]
     output_dir = sys.argv[3] if len(sys.argv) > 3 else "./output"
-    
+
     try:
         success = create_cv(profile_path, job_path, output_dir)
         if success:
